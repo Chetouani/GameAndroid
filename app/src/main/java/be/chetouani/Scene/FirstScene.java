@@ -3,6 +3,7 @@ package be.chetouani.Scene;
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.util.GLState;
+import org.andengine.util.color.Color;
 
 import be.chetouani.Management.SceneManager;
 
@@ -20,6 +21,7 @@ public class FirstScene extends BaseScene{
                 pGLState.enableDither();
             }
         };
+        getBackground().setColor(Color.BLACK);
         lancement.setPosition(0,0);
         attachChild(lancement);
     }

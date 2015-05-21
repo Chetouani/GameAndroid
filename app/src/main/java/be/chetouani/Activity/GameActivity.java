@@ -1,6 +1,8 @@
 package be.chetouani.Activity;
 
 import org.andengine.engine.camera.Camera;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.FillResolutionPolicy;
@@ -19,8 +21,8 @@ import be.chetouani.Management.SceneManager;
 
 public class GameActivity  extends SimpleBaseGameActivity{
 
-    public static final int LONGUEUR_ZONE_AFFICHAGE = 1379;
-    public static final int HAUTEUR_ZONE_AFFICHAGE = 1600;
+    public static final int LONGUEUR_ZONE_AFFICHAGE = 800;
+    public static final int HAUTEUR_ZONE_AFFICHAGE = 480;
 
     private Camera zoneAffichage;
     private ResourceManager resourceManager;
@@ -29,7 +31,7 @@ public class GameActivity  extends SimpleBaseGameActivity{
     @Override
     public EngineOptions onCreateEngineOptions() {
         zoneAffichage = new Camera(0,0,LONGUEUR_ZONE_AFFICHAGE,HAUTEUR_ZONE_AFFICHAGE);
-        EngineOptions optionMoteur = new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED,
+        EngineOptions optionMoteur = new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED,
                 new FillResolutionPolicy(), zoneAffichage);
         optionMoteur.getAudioOptions().setNeedsMusic(true).setNeedsSound(true);
         return optionMoteur;
@@ -47,6 +49,15 @@ public class GameActivity  extends SimpleBaseGameActivity{
 
     @Override
     protected Scene onCreateScene() {
+        mEngine.registerUpdateHandler(new TimerHandler(2f, new ITimerCallback() {
+            @Override
+            public void onTimePassed(TimerHandler pTimerHandler) {
+                mEngine.unregisterUpdateHandler(pTimerHandler);
+                resourceManager.chargerResourcesMenu();
+                sceneManager.setScene(SceneManager.SceneType.SCENE_MENU);
+                resourceManager.dechargerResourcesLancement();
+            }
+        }));
         sceneManager.setScene(SceneManager.SceneType.SCENE_LANCEMENT);
         return sceneManager.creeFistScene();
     }
